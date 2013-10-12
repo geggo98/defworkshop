@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Leiningen: workshoplib:workshoplib:1.0.0-20131010.222904-5">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/workshoplib/workshoplib/1.0.0-SNAPSHOT/workshoplib-1.0.0-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

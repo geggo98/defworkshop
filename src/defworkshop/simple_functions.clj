@@ -112,53 +112,62 @@
 ;; ## Simple Functions
 ;;
 
-(defn ^:not-implemented double-number
+(defn double-number
   "Write a function that returns a doubled number
 
       f(x) = x + x;"
   [x]
-  (…))
+  (* 2 x))
 
 (comment
   (= 4 (double-number 2)))
 
-(defn ^:not-implemented square
+(defn square
   "Write a function returns a square of a number"
   [x]
-  (…))
+  (* x x))
 
 (comment
   (= 16 (square 4)))
 
-(defn ^:not-implemented cube
+(defn cube
   "Write a function that returns a cube of a number"
   [x]
-  (…))
+  (* x x x))
 
 (comment
   (= 64 (cube 4)))
 
-(defn ^:not-implemented sum-of-numbers
+(defn sum-of-numbers
   "Write a multi-arity function for `sum-of-numbers`, for 2, 3 and 4 arguments"
-  ([a b]
-     (…)))
+  ([a b] (+ a b))
+  ([a b c] (+ a b c))
+  ([a b c d] (+ a b c d))
+  )
 
 (comment
-  (= 64 (cube 4)))
+  (= 10 (sum-of-numbers 1 2 3 4)))
 
-(defn ^:not-implemented sum-of-numbers-in-vector
+(comment
+  (= 9 (sum-of-numbers 2 3 4)))
+
+(comment
+  (= 7 (sum-of-numbers 3 4)))
+
+
+(defn sum-of-numbers-in-vector
   "You can destructure arguments from vector by showing the shape of vector,
    for example vector `[1 2]` destructured to `[a b]` will assign `1` to `a` and `2` to `b`:
 
         [1 2]
         [a b]"
-  [_]
-  (…))
+  [x]
+  (apply + x))
 
 (comment
   (+ 7 (sum-of-numbers-in-vector [3 4])))
 
-(defn ^:not-implemented get-second
+(defn get-second
   "You can use & to indicate that the `rest` of elements should go to the argument,
    for example, destructuring `[1 2 3 4]` to `[a b & c]` will assign `1` to `a`, `2` to `b` and
    `(3, 4)` to `c`:
@@ -166,60 +175,60 @@
         [1  2    3 4]
         [a  b  &  c ]
       "
-  [_]
-  (…))
+  [x]
+  (first (rest x)))
 
 (comment
   (= 2 (get-second [1 2 3])))
-(defn ^:not-implemented first-first
+(defn first-first
   "You can deep-destructure things, so `[[1 2] 3]` can be represented as `[[a b] c]`, and
    `a` will hold `1`, `b` will hold `2`, `c` will hold `3`.
 
         [[1 2] 3]
         [[a b] c]"
-  [_]
-  (…))
+  [x]
+  (first (first x)))
 
 (comment
   (= 1 (first-first [[1 2] 2])))
 
-(defn ^:not-implemented get-from-map-as-function
+(defn get-from-map-as-function
   "Maps can also be called as functions, for example, `({:a :b} :a)` will return `:b`"
   [m key]
-  (…))
+  (m key))
 
 (comment
   (= :b (get-from-map-as-function {:a :b} :a)))
 
-(defn ^:not-implemented get-from-map-key-as-function
+(defn get-from-map-key-as-function
   "Keys can also be called as function, for example, `(:a {:a :b})` will also return `b`"
   [m key]
-  (…))
+  (key m))
 
 (comment
   (= :b (get-from-map-key-as-function :a {:a :b})))
 
-(defn ^:not-implemented call-twice
+(defn call-twice
   "Write a function that receives another function (`f`) as argument and calls it with
    given `parameter`, twice"
   [f parameter]
-  (…))
+  (do (f parameter) (f parameter)))
 
 (comment
   (call-twice (fn [i] (println i)))
   (call-twice println))
 
-(defn ^:not-implemented composition-string-plus
+(defn composition-string-plus
   "In Clojure, people don't compose objects that much, they mostly compose functions.
    For example, if you want to obtain a sum of numbers and then convert it to string, you
    can use `comp` to compose a new function out of `+` and `str` functions. Try it:"
   [a1 a2]
-  (…))
+  ((comp str +) a1 a2))
 
 (comment
   (= "4" (composition-string-plus 2 2)))
 
-(defn ^:not-implemented max-from-sequence
+(defn max-from-sequence
   "Sometimes you get all the arguments as a sequence, but still want to make a call to function
    in a \"normal\" way, for example, having a vector of thee numbers: `[1 2 3]` you want to find
    largest one of them, and calling
@@ -233,12 +242,12 @@
    In this case, you want to use `apply` function that receives a function and vector of arguments,
    and applies them to function."
   [seq]
-  (…))
+  (apply max seq))
 
 (comment
   (= 5 (max-from-sequence [4 3 2 5 1 3 2])))
 
-(defn ^:not-implemented read-file-contents
+(defn ^:not-implemented  read-file-contents
   "In order to read contents of the file, you can use `slurp` helper function. Now, write a function
    that reads file contents, prints them out and then returns them.
 
@@ -247,12 +256,14 @@
    For testing purposes, you can use a file that contains numbers from 1 to 5 each one on the new line,
    it's located under \"resources/numbers\""
   [filename]
-  (…))
+  (let [content (slurp filename)]
+    content
+  ))
 
 (comment
   (read-file-contents "resources/numbers"))
 
-(def ^:not-implemented ten-times
+(def ten-times
   "In functional programming, you will often hear about `partial application`. This means that you're taking
    a function, wrapping it into the closure and returning a new, anonymous function that will call the first
    function with given argument. For example,
@@ -262,7 +273,7 @@
    Will generate a function that, when called with `argument`, will execute (+ 2 argument)
 
    In the same spirit, let's write `ten-times` function that will return 50 for 5, and 20 for 2."
-  …)
+  (partial * 10))
 
 (comment
   (= 20 (ten-times 2)))
@@ -271,7 +282,7 @@
   "Now, let's try writing our own partial function replacement, that will take a function and a parameter, and
    return another, anonymous function that will make a call with enclosed value"
   [f param]
-  (…))
+  ())
 
 (comment
   (= 4 ((my-partial + 2) 2)))
